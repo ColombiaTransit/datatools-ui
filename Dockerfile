@@ -12,3 +12,4 @@ RUN mkdir -p /var/www/html/static
 COPY --from=build /index.html /var/www/html/
 COPY --from=build /static/ /var/www/html/static/
 COPY --from=build /dist/ /var/www/html/dist/
+COPY --from=build /lighthttpd/rewrite.conf /etc/lighttpd/conf.d/
