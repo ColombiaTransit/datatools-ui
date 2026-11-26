@@ -256,6 +256,23 @@ With no configured layers, the editor uses its built-in Mapbox choices, or the
 existing single tile URL override in `MAP_BASE_URL` if set. Rebuild the UI after
 editing `env.yml`.
 
+#### Private GraphHopper for the editor
+
+Use matching UI and server builds that include the GraphHopper proxy. Deploy
+the Datatools API and UI on the same origin, with `/api` routed to the server.
+In the UI's `env.yml`, set `GRAPH_HOPPER_USE_PROXY: true` and rebuild the UI.
+
+On the server, set `GRAPHHOPPER_URL` to the base URL or `/route` URL of the
+private instance, using the same value provisioned for ColombiaTransit GTFS
+jobs. Set `CF_ACCESS_CLIENT_ID` and `CF_ACCESS_CLIENT_SECRET` on the server if the
+origin uses Cloudflare Access. Set `GRAPHHOPPER_USER_AGENT` on the server if
+the origin requires a specific User-Agent. These settings can be passed as
+server process environment variables or in the server's private `env.yml`.
+
+The server uses the `bus` profile for street routing and applies the editor's
+existing feed permissions. Keep authentication enabled on exposed
+deployments. Rail routing still uses the existing rail configuration.
+
 ### R5 network validation
 
 While the application handles basic validation even without the `r5_network`
