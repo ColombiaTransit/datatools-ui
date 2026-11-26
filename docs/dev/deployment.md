@@ -243,7 +243,18 @@ Enables the GTFS Editor module.
 - `MAPBOX_ACCESS_TOKEN`
 - `R5_URL` (optional parameter for r5 routing in editor pattern drawing)
 
-**Note:** If maps are gray, add the property `MAP_BASE_URL: http://tile.openstreetmap.org/{z}/{x}/{y}.png` into `env.yml`.
+#### Background maps
+
+Set `MAP_BASE_LAYERS` in the UI's `env.yml` to configure the background map
+choices. Each entry has a unique `id` and `name`, a standard 256-pixel XYZ
+raster tile `url`, and an `attribution` shown on the map. The first entry is
+the default and is also used on other Datatools maps that show a single
+background. The default configuration template includes Positron and OSM Bright
+from the ColombiaTransit tile server.
+
+With no configured layers, the editor uses its built-in Mapbox choices, or the
+existing single tile URL override in `MAP_BASE_URL` if set. Rebuild the UI after
+editing `env.yml`.
 
 ### R5 network validation
 
