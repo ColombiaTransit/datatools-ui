@@ -1,7 +1,6 @@
 // @flow
 
 import clone from 'lodash/cloneDeep'
-import {get} from 'object-path'
 import {routerReducer as routing} from 'react-router-redux'
 import {applyMiddleware, combineReducers, createStore} from 'redux'
 
@@ -173,11 +172,5 @@ export function makeMockStore (initialState: AppState = getMockInitialState()) {
     initialState,
     applyMiddleware(...actionMiddleware)
   )
-  // Helper method to snapshot a part of the state. Don't snapshot the entire
-  // state, because the messages are huge!
-  store.expectStateToMatchSnapshot = (subStatePath: ?string) => {
-    if (!subStatePath) throw new Error('Snapshotting the entire state not allowed!')
-    expect(get(store.getState(), subStatePath)).toMatchSnapshot()
-  }
   return store
 }
