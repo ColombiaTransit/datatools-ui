@@ -37,6 +37,25 @@ Deployment functionality will not work, and persistence may only work in certain
 
 This repository serves as the front end UI for the Data Manager application. It must be run in conjunction with [datatools-server](https://github.com/conveyal/datatools-server)
 
+### Server configuration volume
+
+Compose stores the server configuration in the named volume `dt-server-config`.
+On first startup, the `datatools-config` service copies files from
+`docker/server/` into the volume. Datatools reads the configuration from the
+volume at `/config`.
+
+For an existing installation, keep your current files in `docker/server/`
+for the first start so Compose can copy them into the new volume. To apply
+later edits from that directory, run these commands from `docker/`:
+
+```bash
+docker compose run --rm --entrypoint cp datatools-config -a /config-source/. /config/
+docker compose restart datatools-server
+```
+
+The copy command replaces files in the volume with the matching files from
+the host directory.
+
 ### OpenID Connect sign-in
 
 Configure OIDC on [datatools-server](https://github.com/ColombiaTransit/datatools-server#oidc-login-preview)
