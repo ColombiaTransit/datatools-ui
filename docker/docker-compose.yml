@@ -66,7 +66,7 @@ services:
       - dt-server-config:/config:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=treafik_default"
+      - "traefik.docker.network=traefik_default"
       - "traefik.http.services.datatools-api.loadbalancer.server.port=4000"
     networks:
       - default
@@ -78,7 +78,7 @@ services:
     environment: *common-variables
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=treafik_default"
+      - "traefik.docker.network=traefik_default"
       - "traefik.http.services.datatools-ui.loadbalancer.server.port=9966"
     networks:
       - default
@@ -106,7 +106,7 @@ networks:
   database:
     internal: true
   traefik:
-    name: "treafik_default"
+    name: "traefik_default"
     external: true
 volumes:
   dt-server-config:

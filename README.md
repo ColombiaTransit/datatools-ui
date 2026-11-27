@@ -71,7 +71,7 @@ It sends `/api` and its subpaths to the server and other paths to the UI on the
 same hostname.
 
 1. Make sure Traefik has the Docker and file providers enabled and is connected
-   to the existing external Docker network `treafik_default`.
+   to the existing external Docker network `traefik_default`.
 2. Copy your `datatools.yml` into the Traefik file provider's dynamic
    configuration directory. Replace `datatools.example.org` in both rules,
    adjust `websecure` if your HTTPS entry point has a different name, and
