@@ -11,16 +11,18 @@ The core application for IBI Group's TRANSIT-Data-Tools suite. This application 
 
 ## Quick Start
 
-A pre-configured datatools instance can be lauched via Docker by running
+Datatools uses an existing Traefik instance to serve the UI and API on one HTTPS
+hostname. Follow [the Traefik setup](#serve-datatools-through-an-existing-traefik-instance)
+before starting the stack:
 
 ```bash
 cd docker
 cp ../configurations/default/env.yml.tmp ../configurations/default/env.yml
 docker compose pull datatools-server
-docker compose up --build
+docker compose up -d --build
 ```
 
-from the datatools-ui directory. Datatools will then be running on port `9966`.
+Open the HTTPS hostname configured in Traefik.
 
 Compose builds the UI locally and pulls `ghcr.io/colombiatransit/datatools-server:dev`
 for the API. Set `DATATOOLS_SERVER_IMAGE` in the shell or in `docker/.env` to
@@ -57,32 +59,47 @@ This repository serves as the front end UI for the Data Manager application. It 
 
 ### Serve Datatools through an existing Traefik instance
 
-The [Compose override](docker/docker-compose.traefik.yml) registers the UI and API
-with the Traefik Docker provider. The [dynamic configuration](docker/traefik/datatools.yml)
-defines the HTTPS routes. It sends `/api` and `/api/…` to the server and other
-paths to the UI on the same hostname.
+The main Compose file registers the UI and API with Traefik's Docker provider.
+The [dynamic configuration](docker/traefik/datatools.yml) defines HTTPS routing.
+It sends `/api` and its subpaths to the server and other paths to the UI on the
+same hostname.
 
-1. Set `TRAEFIK_NETWORK` in your shell or `docker/.env` to the existing external
+1. Make sure Traefik has the Docker and file providers enabled. Set
+   `TRAEFIK_NETWORK` in your shell or `docker/.env` to the existing external
    Docker network that Traefik uses. The example defaults to `traefik`.
 2. Copy `docker/traefik/datatools.yml` into your Traefik file provider's dynamic
    configuration directory. Replace `datatools.example.org` in both rules,
-   adjust `websecure` if your HTTPS entry point has a different name, and use
-   your Traefik TLS setup to provide a certificate for the hostname. If you use
-   a named certificate resolver, add its name under `tls.certResolver` on both routers.
-3. Set `application.public_url` in Datatools to the same HTTPS origin.
-   Enable Datatools authentication before publishing the site. For Keycloak,
-   register the callback at that origin as described in the OIDC setup below.
-4. From `docker/`, start the stack with both Compose files.
+   adjust `websecure` if your HTTPS entry point has a different name, and
+   provide a certificate for the hostname through your Traefik TLS setup.
+   If you use a named certificate resolver, set `tls.certResolver` on both routers.
+3. Set `application.public_url` in `docker/server/server.yml` to the same HTTPS
+   origin. Configure authentication before routing public traffic to Datatools.
+   For Keycloak, see the [OIDC setup](#openid-connect-sign-in). If you already
+   have a server configuration volume, apply the file change as described below.
 
-   ```bash
-   docker compose -f docker-compose.yml -f docker-compose.traefik.yml up -d --build
-   ```
+Only the UI and API join the shared Traefik network, and neither publishes a
+host port. The Docker provider can also generate routers from its `defaultRule`
+for containers with service registration labels. Review that rule and the
+entry points in your Traefik configuration.
 
-The override removes the direct host port mappings for the UI and API. Only
-the UI and server join the shared Traefik network. Traefik can also generate
-routers for these Docker services from the Docker provider's `defaultRule`.
-Check your existing default rule and entry points if you want to restrict
-routing to the hostname in the dynamic file.
+### Server configuration volume
+
+Compose stores the server configuration in the named volume `dt-server-config`.
+On first startup, the `datatools-config` service copies files from
+`docker/server/` into the volume. Datatools reads the configuration from the
+volume at `/config`.
+
+For an existing installation, keep your current files in `docker/server/`
+for the first start so Compose can copy them into the new volume. To apply
+later edits from that directory, run these commands from `docker/`:
+
+```bash
+docker compose run --rm --entrypoint cp datatools-config -a /config-source/. /config/
+docker compose restart datatools-server
+```
+
+The copy command replaces files in the volume with the matching files from
+the host directory.
 
 ### OpenID Connect sign-in
 

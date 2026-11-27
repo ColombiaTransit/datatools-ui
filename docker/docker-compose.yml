@@ -1,5 +1,7 @@
 version: "3.8"
 
+x-datatools-server-image: &datatools-server-image "${DATATOOLS_SERVER_IMAGE:-ghcr.io/colombiatransit/datatools-server:dev}"
+
 x-common-variables: &common-variables
   - BUGSNAG_KEY=${BUGSNAG_KEY}
   - S3_BUCKET=${S3_BUCKET}
@@ -32,19 +34,37 @@ x-common-variables: &common-variables
   - DISABLE_AUTH=true
 
 services:
+  datatools-config:
+    image: *datatools-server-image
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        if [ ! -f /config/env.yml ] || [ ! -f /config/server.yml ]; then
+          test -f /config-source/env.yml
+          test -f /config-source/server.yml
+          cp -an /config-source/. /config/
+        fi
+    network_mode: none
+    volumes:
+      - ./server:/config-source:ro
+      - dt-server-config:/config
   datatools-server:
-    image: "${DATATOOLS_SERVER_IMAGE:-ghcr.io/colombiatransit/datatools-server:dev}"
+    image: *datatools-server-image
     restart: always
     environment: *common-variables
+    depends_on:
+      datatools-config:
+        condition: service_completed_successfully
     volumes:
-      - type: bind
-        source: ./server/
-        target: /config
-    ports:
-      - "4000:4000"
+      - dt-server-config:/config:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik}"
+      - "traefik.http.services.datatools-api.loadbalancer.server.port=4000"
     networks:
       - default
       - database
+      - traefik
   datatools-ui:
     build:
       context: ../
@@ -52,8 +72,13 @@ services:
       args: *common-variables
     restart: always
     environment: *common-variables
-    ports:
-      - "9966:9966"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik}"
+      - "traefik.http.services.datatools-ui.loadbalancer.server.port=9966"
+    networks:
+      - default
+      - traefik
   mongo:
     image: mongo:8.0
     restart: always
@@ -76,6 +101,10 @@ services:
 networks:
   database:
     internal: true
+  traefik:
+    name: "${TRAEFIK_NETWORK:-traefik}"
+    external: true
 volumes:
+  dt-server-config:
   dt-postgres:
   dt-mongo:
