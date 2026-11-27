@@ -31,6 +31,24 @@ MongoDB and PostgreSQL are reachable by the Datatools server through a private
 Compose network. The server also uses the default network to serve the UI and
 connect to external services such as a separately hosted Keycloak instance.
 
+Compose uses MongoDB 8.0 and PostgreSQL 17 with their existing volume mounts.
+Use a Datatools server image built from
+[server PR #9](https://github.com/ColombiaTransit/datatools-server/pull/9) or a
+later commit for MongoDB 8.0.
+
+For an existing stack, check the running versions from `docker/` before
+recreating either database container.
+
+```bash
+docker compose exec mongo mongod --version
+docker compose exec postgres postgres --version
+```
+
+If either version differs from MongoDB 8.0.x or PostgreSQL 17.x, back up its
+data and plan the migration before changing the image tag. See the
+[MongoDB 8.0 upgrade instructions](https://www.mongodb.com/docs/manual/release-notes/8.0-upgrade-standalone/)
+and the [PostgreSQL upgrade documentation](https://www.postgresql.org/docs/17/upgrading.html).
+
 Deployment functionality will not work, and persistence may only work in certain cases (look into Docker volumes for more info).
 
 ## Configuration
