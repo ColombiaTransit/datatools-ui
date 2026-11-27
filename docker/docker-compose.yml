@@ -57,11 +57,14 @@ services:
         condition: service_completed_successfully
     volumes:
       - dt-server-config:/config:ro
-    ports:
-      - "4000:4000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=treafik_default"
+      - "traefik.http.services.datatools-api.loadbalancer.server.port=4000"
     networks:
       - default
       - database
+      - traefik
   datatools-ui:
     build:
       context: ../
@@ -69,8 +72,13 @@ services:
       args: *common-variables
     restart: always
     environment: *common-variables
-    ports:
-      - "9966:9966"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=treafik_default"
+      - "traefik.http.services.datatools-ui.loadbalancer.server.port=9966"
+    networks:
+      - default
+      - traefik
   mongo:
     image: mongo:8.0
     restart: always
@@ -93,6 +101,9 @@ services:
 networks:
   database:
     internal: true
+  traefik:
+    name: "treafik_default"
+    external: true
 volumes:
   dt-server-config:
   dt-postgres:

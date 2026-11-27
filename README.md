@@ -11,16 +11,18 @@ The core application for IBI Group's TRANSIT-Data-Tools suite. This application 
 
 ## Quick Start
 
-A pre-configured datatools instance can be lauched via Docker by running
+Datatools uses an existing Traefik instance to serve the UI and API on one HTTPS
+hostname. Follow [the Traefik setup](#serve-datatools-through-an-existing-traefik-instance)
+before starting the stack:
 
 ```bash
 cd docker
 cp ../configurations/default/env.yml.tmp ../configurations/default/env.yml
 docker compose pull datatools-server
-docker compose up --build
+docker compose up -d --build
 ```
 
-from the datatools-ui directory. Datatools will then be running on port `9966`.
+Open the HTTPS hostname configured in Traefik.
 
 Compose builds the UI locally and pulls `ghcr.io/colombiatransit/datatools-server:dev`
 for the API. Set `DATATOOLS_SERVER_IMAGE` in the shell or in `docker/.env` to
@@ -54,6 +56,30 @@ Deployment functionality will not work, and persistence may only work in certain
 ## Configuration
 
 This repository serves as the front end UI for the Data Manager application. It must be run in conjunction with [datatools-server](https://github.com/conveyal/datatools-server)
+
+### Serve Datatools through an existing Traefik instance
+
+The main Compose file registers the UI and API with Traefik's Docker provider.
+The separate Traefik file-provider configuration defines HTTPS routing.
+It sends `/api` and its subpaths to the server and other paths to the UI on the
+same hostname.
+
+1. Make sure Traefik has the Docker and file providers enabled and is connected
+   to the existing external Docker network `treafik_default`.
+2. Copy your `datatools.yml` into the Traefik file provider's dynamic
+   configuration directory. Replace `datatools.example.org` in both rules,
+   adjust `websecure` if your HTTPS entry point has a different name, and
+   provide a certificate for the hostname through your Traefik TLS setup.
+   If you use a named certificate resolver, set `tls.certResolver` on both routers.
+3. Set `application.public_url` in `docker/server/server.yml` to the same HTTPS
+   origin. Configure authentication before routing public traffic to Datatools.
+   For Keycloak, see the [OIDC setup](#openid-connect-sign-in). If you already
+   have a server configuration volume, apply the file change as described below.
+
+Only the UI and API join the shared Traefik network, and neither publishes a
+host port. The Docker provider can also generate routers from its `defaultRule`
+for containers with service registration labels. Review that rule and the
+entry points in your Traefik configuration.
 
 ### Server configuration volume
 
