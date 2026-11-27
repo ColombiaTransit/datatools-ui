@@ -4,7 +4,7 @@ const archiver = require('archiver')
 const extractZip = require('extract-zip')
 const fs = require('fs-extra')
 const fetch = require('isomorphic-fetch')
-const createPushToS3 = require('mastarm/lib/push-to-s3')
+const S3 = require('aws-sdk/clients/s3')
 const Slack = require('slack')
 
 const {
@@ -138,12 +138,13 @@ async function uploadToMicrosoftTeams () {
   let uploadedLogsToS3 = false
   if (LOGS_S3_BUCKET) {
     try {
-      await createPushToS3({ s3bucket: LOGS_S3_BUCKET })(
-        {
-          body: await fs.readFile(logsZipfile),
-          outfile: uploadedLogsFilename
-        }
-      )
+      await new S3().upload({
+        ACL: 'public-read',
+        Body: await fs.readFile(logsZipfile),
+        Bucket: LOGS_S3_BUCKET,
+        ContentType: 'application/zip',
+        Key: uploadedLogsFilename
+      }).promise()
       console.log('successfully uploaded to s3')
       uploadedLogsToS3 = true
     } catch (e) {

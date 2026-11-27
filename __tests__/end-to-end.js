@@ -8,7 +8,7 @@ import md5File from 'md5-file/promise'
 import moment from 'moment'
 import SimpleNodeLogger from 'simple-node-logger'
 import uuidv4 from 'uuid/v4'
-// $FlowFixMe we rely on puppeteer being imported externally, as the latest version conflicts with mastarm
+// $FlowFixMe Puppeteer is supplied by the browser-test image.
 import puppeteer from 'puppeteer'
 import { PuppeteerScreenRecorder } from 'puppeteer-screen-recorder'
 
@@ -19,8 +19,6 @@ import {collectingCoverage, getTestFolderFilename, isCi, isDocker} from './test-
 // const ISOLATED_TEST = 'should update a project by adding an otp server'
 const ISOLATED_TEST = null // null means run all tests
 
-// TODO: Allow the below options (puppeteer and test) to be enabled via command
-// line options parsed by mastarm.
 const puppeteerOptions = {
   // dumpio: true, // dumps all browser console to docker logs
   headless: isCi || isDocker,

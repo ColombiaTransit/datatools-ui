@@ -21,7 +21,7 @@ function getProcessEnvEntries (envVar) {
   if (fileName) {
     const yaml = {
       ...safeLoad(fs.readFileSync(fileName)),
-      // Add UI commit, repo, and build date (copied from js-transform.js from mastarm).
+      // Add UI commit, repo, and build date.
       BUILD_TIMESTAMP: (new Date()).getTime(),
       COMMIT_SHA: process.env.COMMIT_SHA || getCommit(),
       REPO_URL: pkg.repository && pkg.repository.url && pkg.repository.url.replace('.git', '')

@@ -6,7 +6,6 @@ USER root
 RUN apk add --no-cache git
 
 RUN yarn global add https://github.com/ibi-group/otp-runner.git
-RUN yarn global add miles-grant-ibigroup/mastarm#f61ca541a788e8cae8a0e32b886de754846ea16f
 
 COPY package.json yarn.lock /datatools-ui/
 RUN yarn

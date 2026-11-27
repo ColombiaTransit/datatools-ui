@@ -6,8 +6,7 @@ The application consists of two repositories: a [Spark-powered Java backend](htt
 and a [Javascript frontend written with React and Redux](https://github.com/ibi-group/datatools-ui).
 To install and deploy the application, you will need Java 8 and Maven for the
 [datatools-server](https://github.com/ibi-group/datatools-server)
-and Node (>= v20 required, >= v22 recommended), npm, yarn and
-[mastarm](https://github.com/conveyal/mastarm) for the
+and Node (>= v20 required, >= v22 recommended), npm and Yarn for the
 [datatools-ui](https://github.com/ibi-group/datatools-ui).
 
 User authentication is done via [Auth0](http://auth0.com). You will need an
@@ -194,7 +193,7 @@ $ cd datatools-ui
 $ yarn
 ```
 
-Build and deploy `datatools-ui` to s3 using npm script:
+For an S3 static deployment, install and configure the AWS CLI, then build and upload the UI:
 
 ```bash
 $ npm run deploy -- s3://$S3_BUCKET_NAME/dist
