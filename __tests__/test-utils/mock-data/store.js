@@ -1,14 +1,11 @@
 // @flow
 
-import multi from '@conveyal/woonerf/store/multi'
-import promise from '@conveyal/woonerf/store/promise'
-import {middleware as fetchMiddleware} from '@conveyal/woonerf/fetch'
 import clone from 'lodash/cloneDeep'
 import {get} from 'object-path'
 import {routerReducer as routing} from 'react-router-redux'
 import {applyMiddleware, combineReducers, createStore} from 'redux'
-import thunkMiddleware from 'redux-thunk'
 
+import actionMiddleware from '../../../lib/common/store/actionMiddleware'
 import admin from '../../../lib/admin/reducers'
 import {defaultState as defaultAdminOrganizationsState} from '../../../lib/admin/reducers/organizations'
 import {defaultState as defaultAdminServersState} from '../../../lib/admin/reducers/servers'
@@ -156,13 +153,6 @@ export function getMockEditorState (): AppState {
   return editorState
 }
 
-const storeMiddleWare = [
-  fetchMiddleware,
-  multi,
-  promise,
-  thunkMiddleware
-]
-
 /**
  * Creates a new store with reducers that will update state.
  */
@@ -181,7 +171,7 @@ export function makeMockStore (initialState: AppState = getMockInitialState()) {
       }
     }),
     initialState,
-    applyMiddleware(...storeMiddleWare)
+    applyMiddleware(...actionMiddleware)
   )
   // Helper method to snapshot a part of the state. Don't snapshot the entire
   // state, because the messages are huge!

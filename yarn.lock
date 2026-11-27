@@ -1081,24 +1081,6 @@
   resolved "https://registry.yarnpkg.com/@conveyal/lonlat/-/lonlat-1.4.0.tgz#18a5c1349078a779e710d24af11bc02b24127ba0"
   integrity sha512-ag1FcRuwRGAZgeZ4e3sUq+gblf1Pgma2c9SaIVXluIrgsZ9Lrq7xhCbV0ErN8chyg/OCOoG8m/l3mgzbycQCnQ==
 
-"@conveyal/woonerf@^4.2.1":
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/@conveyal/woonerf/-/woonerf-4.2.1.tgz#b8fe5b3c87087fd98720de944c38506510c4ad0a"
-  integrity sha512-QAbAiNpjMWCcH3npNwFVaAH5cYA5CwB/KIvoouMu52wumJOqf0y4IZwuBdsHUMYkpQWmbHf9skFZTyNeRxd64w==
-  dependencies:
-    debug "^4.0.1"
-    isomorphic-fetch "^2.2.1"
-    lodash "^4.17.11"
-    logrocket "^0.6.17"
-    react-redux "^5.0.7"
-    react-router "^3.0.2"
-    react-router-redux "^4.0.8"
-    redux "^4.0.0"
-    redux-actions "^2.6.1"
-    redux-logger "^3.0.6"
-    redux-mock-store "^1.5.3"
-    redux-thunk "^2.3.0"
-
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
@@ -13287,19 +13269,6 @@ react-router@6.1.1:
   dependencies:
     history "^5.1.0"
 
-react-router@^3.0.2:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-3.2.1.tgz#b9a3279962bdfbe684c8bd0482b81ef288f0f244"
-  integrity sha512-SXkhC0nr3G0ltzVU07IN8jYl0bB6FsrDIqlLC9dK3SITXqyTJyM7yhXlUqs89w3Nqi5OkXsfRUeHX+P874HQrg==
-  dependencies:
-    create-react-class "^15.5.1"
-    history "^3.0.0"
-    hoist-non-react-statics "^2.3.1"
-    invariant "^2.2.1"
-    loose-envify "^1.2.0"
-    prop-types "^15.5.6"
-    warning "^3.0.0"
-
 react-router@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-3.2.6.tgz#cad202796a7bba3efc2100da453b3379c9d4aeb4"
@@ -13731,13 +13700,6 @@ redux-merge-reducers@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/redux-merge-reducers/-/redux-merge-reducers-0.0.2.tgz#2d83da42de18636bd526be183de19e9a3a0d647b"
   integrity sha1-LYPaQt4YY2vVJr4YPeGemjoNZHs=
-
-redux-mock-store@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.5.3.tgz#1f10528949b7ce8056c2532624f7cafa98576c6d"
-  integrity sha512-ryhkkb/4D4CUGpAV2ln1GOY/uh51aczjcRz9k2L2bPx/Xja3c5pSGJJPyR25GNVRXtKIExScdAgFdiXp68GmJA==
-  dependencies:
-    lodash.isplainobject "^4.0.6"
 
 redux-thunk@^2.3.0:
   version "2.3.0"
