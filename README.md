@@ -108,6 +108,16 @@ docker compose run --rm --no-deps -T --entrypoint /bin/sh datatools-config -ec \
 docker compose restart datatools-server
 ```
 
+### Application logo
+
+The UI image serves the bundled logo and favicon at
+`/branding/datatools-logo.png`. Fresh stacks use it for the sidebar and welcome
+page. If your existing server configuration volume still points to the old logo,
+set both `application.logo` and `application.logo_large` in `server.yml` to
+`/branding/datatools-logo.png`. Apply the file using the volume instructions
+above and restart Datatools Server. Pull and redeploy the updated UI image to
+serve the new asset.
+
 ### OpenID Connect sign-in
 
 Follow the [Keycloak server setup guide](https://github.com/ColombiaTransit/datatools-server/blob/dev/docs/keycloak-setup.md)
