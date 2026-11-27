@@ -33,7 +33,7 @@ x-common-variables: &common-variables
 
 services:
   datatools-server:
-    image: ghcr.io/ibi-group/datatools-server:dev
+    image: "${DATATOOLS_SERVER_IMAGE:-ghcr.io/colombiatransit/datatools-server:dev}"
     restart: always
     environment: *common-variables
     volumes:

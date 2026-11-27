@@ -16,10 +16,16 @@ A pre-configured datatools instance can be lauched via Docker by running
 ```bash
 cd docker
 cp ../configurations/default/env.yml.tmp ../configurations/default/env.yml
-docker compose up
+docker compose pull datatools-server
+docker compose up --build
 ```
 
 from the datatools-ui directory. Datatools will then be running on port `9966`.
+
+Compose builds the UI locally and pulls `ghcr.io/colombiatransit/datatools-server:dev`
+for the API. Set `DATATOOLS_SERVER_IMAGE` in the shell or in `docker/.env` to
+select another tag or an image digest. Sign in with `docker login ghcr.io` before
+pulling if the package is private.
 
 Deployment functionality will not work, and persistence may only work in certain cases (look into Docker volumes for more info).
 
