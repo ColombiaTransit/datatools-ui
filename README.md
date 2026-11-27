@@ -27,6 +27,10 @@ for the API. Set `DATATOOLS_SERVER_IMAGE` in the shell or in `docker/.env` to
 select another tag or an image digest. Sign in with `docker login ghcr.io` before
 pulling if the package is private.
 
+MongoDB and PostgreSQL are reachable by the Datatools server through a private
+Compose network. The server also uses the default network to serve the UI and
+connect to external services such as a separately hosted Keycloak instance.
+
 Deployment functionality will not work, and persistence may only work in certain cases (look into Docker volumes for more info).
 
 ## Configuration
