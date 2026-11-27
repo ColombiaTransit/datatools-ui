@@ -60,14 +60,14 @@ This repository serves as the front end UI for the Data Manager application. It 
 ### Serve Datatools through an existing Traefik instance
 
 The main Compose file registers the UI and API with Traefik's Docker provider.
-The [dynamic configuration](docker/traefik/datatools.yml) defines HTTPS routing.
+The separate Traefik file-provider configuration defines HTTPS routing.
 It sends `/api` and its subpaths to the server and other paths to the UI on the
 same hostname.
 
 1. Make sure Traefik has the Docker and file providers enabled. Set
    `TRAEFIK_NETWORK` in your shell or `docker/.env` to the existing external
    Docker network that Traefik uses. The example defaults to `traefik`.
-2. Copy `docker/traefik/datatools.yml` into your Traefik file provider's dynamic
+2. Copy your `datatools.yml` into the Traefik file provider's dynamic
    configuration directory. Replace `datatools.example.org` in both rules,
    adjust `websecure` if your HTTPS entry point has a different name, and
    provide a certificate for the hostname through your Traefik TLS setup.
