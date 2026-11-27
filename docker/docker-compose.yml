@@ -55,7 +55,7 @@ services:
     ports:
       - "9966:9966"
   mongo:
-    image: mongo
+    image: mongo:8.0
     restart: always
     volumes:
       - dt-mongo:/data/db
