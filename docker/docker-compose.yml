@@ -67,7 +67,7 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASS: e2e
       POSTGRES_DB: dmtest
-    image: postgres
+    image: postgres:17
     restart: always
     volumes:
       - dt-postgres:/var/lib/postgresql/data

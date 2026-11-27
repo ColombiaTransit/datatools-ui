@@ -31,6 +31,13 @@ MongoDB and PostgreSQL are reachable by the Datatools server through a private
 Compose network. The server also uses the default network to serve the UI and
 connect to external services such as a separately hosted Keycloak instance.
 
+Compose uses PostgreSQL 17 with its existing data-volume path. Before applying
+this configuration to a stack that already has a database, check the running
+major version with `docker compose exec postgres postgres --version`. If it
+differs from 17, back up the database and plan a migration before replacing
+the container. A major-version change cannot reuse the same data directory
+directly.
+
 Deployment functionality will not work, and persistence may only work in certain cases (look into Docker volumes for more info).
 
 ## Configuration
