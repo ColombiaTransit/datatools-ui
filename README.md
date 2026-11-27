@@ -55,6 +55,35 @@ Deployment functionality will not work, and persistence may only work in certain
 
 This repository serves as the front end UI for the Data Manager application. It must be run in conjunction with [datatools-server](https://github.com/conveyal/datatools-server)
 
+### Serve Datatools through an existing Traefik instance
+
+The [Compose override](docker/docker-compose.traefik.yml) registers the UI and API
+with the Traefik Docker provider. The [dynamic configuration](docker/traefik/datatools.yml)
+defines the HTTPS routes. It sends `/api` and `/api/…` to the server and other
+paths to the UI on the same hostname.
+
+1. Set `TRAEFIK_NETWORK` in your shell or `docker/.env` to the existing external
+   Docker network that Traefik uses. The example defaults to `traefik`.
+2. Copy `docker/traefik/datatools.yml` into your Traefik file provider's dynamic
+   configuration directory. Replace `datatools.example.org` in both rules,
+   adjust `websecure` if your HTTPS entry point has a different name, and use
+   your Traefik TLS setup to provide a certificate for the hostname. If you use
+   a named certificate resolver, add its name under `tls.certResolver` on both routers.
+3. Set `application.public_url` in Datatools to the same HTTPS origin.
+   Enable Datatools authentication before publishing the site. For Keycloak,
+   register the callback at that origin as described in the OIDC setup below.
+4. From `docker/`, start the stack with both Compose files.
+
+   ```bash
+   docker compose -f docker-compose.yml -f docker-compose.traefik.yml up -d --build
+   ```
+
+The override removes the direct host port mappings for the UI and API. Only
+the UI and server join the shared Traefik network. Traefik can also generate
+routers for these Docker services from the Docker provider's `defaultRule`.
+Check your existing default rule and entry points if you want to restrict
+routing to the hostname in the dynamic file.
+
 ### OpenID Connect sign-in
 
 Configure OIDC on [datatools-server](https://github.com/ColombiaTransit/datatools-server#oidc-login-preview)
