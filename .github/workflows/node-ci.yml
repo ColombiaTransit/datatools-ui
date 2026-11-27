@@ -10,6 +10,21 @@ on:
 jobs:
   test-build-release:
     runs-on: ubuntu-latest
+    env:
+      # The existing end-to-end suite needs a real Auth0 tenant and S3 access.
+      RUN_AUTH0_E2E: >-
+        ${{ inputs.e2e &&
+            secrets.E2E_AUTH0_USERNAME != '' &&
+            secrets.E2E_AUTH0_PASSWORD != '' &&
+            secrets.AUTH0_CLIENT_ID != '' &&
+            secrets.AUTH0_CONNECTION_NAME != '' &&
+            secrets.AUTH0_DOMAIN != '' &&
+            secrets.AUTH0_API_CLIENT != '' &&
+            secrets.AUTH0_API_SECRET != '' &&
+            secrets.AUTH0_DATATOOLS_PEM != '' &&
+            secrets.S3_BUCKET != '' &&
+            secrets.AWS_ACCESS_KEY_ID != '' &&
+            secrets.AWS_SECRET_ACCESS_KEY != '' }}
     steps:
       - uses: actions/checkout@v2
       # install python 3.x in order to have mkdocs properly installed
@@ -42,10 +57,11 @@ jobs:
         run: yarn build
       - name: Build docs
         run: mkdocs build
-      - name: Whether e2e should run
-        run: echo Running e2e - {{ inputs.e2e }}
+      - name: Report unavailable Auth0 end-to-end configuration
+        if: inputs.e2e && env.RUN_AUTH0_E2E != 'true'
+        run: echo 'Skipping legacy Auth0 end-to-end tests because required credentials or configuration are absent.'
       - name: Write .env and env.yml files for Docker
-        if: inputs.e2e
+        if: env.RUN_AUTH0_E2E == 'true'
         run: |
           touch __tests__/e2e/.env 
           echo BUGSNAG_KEY= ${{ secrets.BUGSNAG_KEY }} >> __tests__/e2e/.env
@@ -83,14 +99,15 @@ jobs:
           echo MS_TEAMS_WEBHOOK_URL: ${{ secrets.MS_TEAMS_WEBHOOK_URL }} >> configurations/default/env.yml
 
       - name: Run e2e tests
-        if: inputs.e2e
+        if: env.RUN_AUTH0_E2E == 'true'
         run: |
           (echo "E2E Test Attempt 1" && docker compose --env-file __tests__/e2e/.env -f __tests__/e2e/docker-compose.yml up --abort-on-container-exit) || \
           (echo "E2E Test Attempt 2" && docker compose --env-file __tests__/e2e/.env -f __tests__/e2e/docker-compose.yml up --abort-on-container-exit) || \
           (echo "E2E Test Attempt 3" && docker compose --env-file __tests__/e2e/.env -f __tests__/e2e/docker-compose.yml up --abort-on-container-exit) || \
           (echo "E2E Tests Failed" && exit 1)
-      # At this point, the build is successful.
+      # The fork publishes its container image in build-datatools-ui.yml.
       - name: Semantic Release
+        if: github.repository == 'ibi-group/datatools-ui' && github.event_name == 'push'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
