@@ -30,5 +30,7 @@ jobs:
           context: .
           file: docker/ui/Dockerfile
           push: true
+          build-args: |
+            COMMIT_SHA=${{ github.sha }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}

@@ -23,7 +23,7 @@ function getProcessEnvEntries (envVar) {
       ...safeLoad(fs.readFileSync(fileName)),
       // Add UI commit, repo, and build date (copied from js-transform.js from mastarm).
       BUILD_TIMESTAMP: (new Date()).getTime(),
-      COMMIT_SHA: getCommit(),
+      COMMIT_SHA: process.env.COMMIT_SHA || getCommit(),
       REPO_URL: pkg.repository && pkg.repository.url && pkg.repository.url.replace('.git', '')
     }
 
