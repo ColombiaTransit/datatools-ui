@@ -67,6 +67,7 @@
     "leaflet-draw": "^0.4.9",
     "leaflet-textpath": "^1.2.3",
     "lodash": "^4.17.10",
+    "logrocket": "^0.6.17",
     "markdown-to-jsx": "^7.1.9",
     "moment": "^2.29.4",
     "numeral": "2.0.4",
