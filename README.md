@@ -13,7 +13,7 @@ The core application for IBI Group's TRANSIT-Data-Tools suite. This application 
 
 Datatools uses an existing Traefik instance to serve the UI and API on one HTTPS
 hostname. Follow [the Traefik setup](#serve-datatools-through-an-existing-traefik-instance)
-before starting the stack:
+and [configure OpenID Connect](#openid-connect-sign-in) before starting the stack:
 
 ```bash
 cd docker
@@ -110,10 +110,22 @@ docker compose restart datatools-server
 
 ### OpenID Connect sign-in
 
-Configure OIDC on [datatools-server](https://github.com/ColombiaTransit/datatools-server#oidc-login-preview)
-and serve the UI and `/api` on the same public origin. The UI reads the authentication
-mode from `/api/manager/public/appinfo`. Store the OIDC client secret in the server
-environment.
+Follow the [Keycloak server setup guide](https://github.com/ColombiaTransit/datatools-server/blob/dev/docs/keycloak-setup.md)
+for the external identity provider. Set `application.public_url` in the active
+server configuration volume to the HTTPS origin shared by the UI and API.
+
+Set these variables in Portainer's stack environment or in `docker/.env` when
+running Compose from the shell.
+
+| Variable | Value |
+| --- | --- |
+| `OIDC_ISSUER` | The exact issuer URL from the Keycloak realm's discovery document. Required. |
+| `OIDC_CLIENT_SECRET` | The confidential client's secret. Required. Supply it through the deployment environment and keep it out of Git. |
+| `OIDC_CLIENT_ID` | The Keycloak client ID. Defaults to `datatools`. |
+| `OIDC_ADMIN_SUBJECT` | Leave empty for the initial deployment. After signing in, read `user.subject` from `/api/auth/oidc/session`, set it here, and redeploy the server. |
+
+The Compose file passes these variables to the Datatools server. The UI selects
+OIDC when `/api/manager/public/appinfo` returns `"authMode": "oidc"`.
 
 In OIDC mode, the browser uses the Datatools session cookie for API requests.
 The sign-out button ends that session. The identity provider can still have an
