@@ -90,21 +90,23 @@ entry points in your Traefik configuration.
 ### Server configuration volume
 
 Compose stores the server configuration in the named volume `dt-server-config`.
-On first startup, the `datatools-config` service copies files from
-`docker/server/` into the volume. Datatools reads the configuration from the
-volume at `/config`.
+On startup, `datatools-config` copies missing files from `/datatools-build/docker/server/`
+inside the UI image. Datatools reads the volume at `/config`. Existing
+`env.yml` and `server.yml` files in the volume are preserved. Custom UI
+images built with this project's Dockerfile include these templates as well.
 
-For an existing installation, keep your current files in `docker/server/`
-for the first start so Compose can copy them into the new volume. To apply
-later edits from that directory, run these commands from `docker/`:
+If you previously customized files under `docker/server/` on the host, copy
+them into the volume to apply those edits. From `docker/`, on the Docker
+host or using its Docker context with the same Compose project name as
+the Portainer stack, run:
 
 ```bash
-docker compose run --rm --entrypoint cp datatools-config -a /config-source/. /config/
+docker compose run --rm --no-deps -T --entrypoint /bin/sh datatools-config -ec \
+  'umask 077; cat > /config/env.yml.new && mv /config/env.yml.new /config/env.yml' < server/env.yml
+docker compose run --rm --no-deps -T --entrypoint /bin/sh datatools-config -ec \
+  'umask 077; cat > /config/server.yml.new && mv /config/server.yml.new /config/server.yml' < server/server.yml
 docker compose restart datatools-server
 ```
-
-The copy command replaces files in the volume with the matching files from
-the host directory.
 
 ### OpenID Connect sign-in
 

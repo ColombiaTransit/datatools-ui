@@ -2,6 +2,8 @@ version: "3.8"
 
 x-datatools-server-image: &datatools-server-image "${DATATOOLS_SERVER_IMAGE:-ghcr.io/colombiatransit/datatools-server:dev}"
 
+x-datatools-ui-image: &datatools-ui-image "${DATATOOLS_UI_IMAGE:-ghcr.io/colombiatransit/datatools-ui:dev}"
+
 x-common-variables: &common-variables
   - BUGSNAG_KEY=${BUGSNAG_KEY}
   - S3_BUCKET=${S3_BUCKET}
@@ -35,18 +37,23 @@ x-common-variables: &common-variables
 
 services:
   datatools-config:
-    image: *datatools-server-image
+    image: *datatools-ui-image
     entrypoint: ["/bin/sh", "-ec"]
     command:
       - |
-        if [ ! -f /config/env.yml ] || [ ! -f /config/server.yml ]; then
-          test -f /config-source/env.yml
-          test -f /config-source/server.yml
-          cp -an /config-source/. /config/
-        fi
+        for file in env.yml server.yml; do
+          if [ -f "/config/$$file" ]; then
+            continue
+          fi
+          source="/datatools-build/docker/server/$$file"
+          if [ ! -f "$$source" ]; then
+            echo "Missing configuration template: $$source" >&2
+            exit 1
+          fi
+          cp "$$source" "/config/$$file"
+        done
     network_mode: none
     volumes:
-      - ./server:/config-source:ro
       - dt-server-config:/config
   datatools-server:
     image: *datatools-server-image
@@ -66,7 +73,7 @@ services:
       - database
       - traefik
   datatools-ui:
-    image: "${DATATOOLS_UI_IMAGE:-ghcr.io/colombiatransit/datatools-ui:dev}"
+    image: *datatools-ui-image
     restart: always
     environment: *common-variables
     labels:
