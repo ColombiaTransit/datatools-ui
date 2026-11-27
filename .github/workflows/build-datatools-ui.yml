@@ -2,7 +2,7 @@ name: Build Datatools UI image
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, react18-preview]
   workflow_dispatch:
 
 jobs:
