@@ -3,16 +3,10 @@
 import multi from '@conveyal/woonerf/store/multi'
 import promise from '@conveyal/woonerf/store/promise'
 import {middleware as fetchMiddleware} from '@conveyal/woonerf/fetch'
-import Enzyme, {mount} from 'enzyme'
-import EnzymeReactAdapter from '@cfaester/enzyme-adapter-react-18'
-import {mountToJson} from 'enzyme-to-json'
 import clone from 'lodash/cloneDeep'
 import {get} from 'object-path'
-import React from 'react'
-import {Provider} from 'react-redux'
 import {routerReducer as routing} from 'react-router-redux'
 import {applyMiddleware, combineReducers, createStore} from 'redux'
-import configureStore from 'redux-mock-store'
 import thunkMiddleware from 'redux-thunk'
 
 import admin from '../../../lib/admin/reducers'
@@ -47,8 +41,6 @@ import {defaultState as defaultManagerUserState} from '../../../lib/manager/redu
 import type {AppState} from '../../../lib/types/reducers'
 
 import * as manager from './manager'
-
-Enzyme.configure({ adapter: new EnzymeReactAdapter() })
 
 const defaultManagerState = {
   languages: defaultManagerLanguagesState,
@@ -198,29 +190,4 @@ export function makeMockStore (initialState: AppState = getMockInitialState()) {
     expect(get(store.getState(), subStatePath)).toMatchSnapshot()
   }
   return store
-}
-
-/**
- * Mount a react component within a mock redux store. This mock redux store
- * accepts actions, but doesn't send any of those results to the reducers.
- * This function is primarily used for taking snapshots of components and
- * containers in order to verify that they are rendering expected values.
- */
-export function mockWithProvider (
-  ConnectedComponent: any,
-  connectedComponentProps: any = {},
-  storeState: AppState = getMockInitialState()
-) {
-  const store = configureStore(storeMiddleWare)(storeState)
-  const wrapper = mount(
-    <Provider store={store}>
-      <ConnectedComponent {...connectedComponentProps} />
-    </Provider>
-  )
-
-  return {
-    snapshot: () => mountToJson(wrapper),
-    store,
-    wrapper
-  }
 }
