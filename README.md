@@ -13,7 +13,7 @@ The core application for IBI Group's TRANSIT-Data-Tools suite. This application 
 
 Datatools uses an existing Traefik instance to serve the UI and API on one HTTPS
 hostname. Follow [the Traefik setup](#serve-datatools-through-an-existing-traefik-instance)
-before starting the stack:
+and [configure OpenID Connect](#openid-connect-sign-in) before starting the stack:
 
 ```bash
 cd docker
@@ -110,10 +110,41 @@ docker compose restart datatools-server
 
 ### OpenID Connect sign-in
 
-Configure OIDC on [datatools-server](https://github.com/ColombiaTransit/datatools-server#oidc-login-preview)
-and serve the UI and `/api` on the same public origin. The UI reads the authentication
-mode from `/api/manager/public/appinfo`. Store the OIDC client secret in the server
-environment.
+Follow the [Keycloak server setup guide](https://github.com/ColombiaTransit/datatools-server/blob/dev/docs/keycloak-setup.md)
+for the external identity provider. Set `application.public_url` in the active
+server configuration volume to the HTTPS origin shared by the UI and API.
+
+Set these variables in Portainer's stack environment or in `docker/.env` when
+running Compose from the shell.
+
+| Variable | Value |
+| --- | --- |
+| `OIDC_ISSUER` | The exact issuer URL from the Keycloak realm's discovery document. Required. |
+| `OIDC_CLIENT_SECRET` | The confidential client's secret. Required. Supply it through the deployment environment and keep it out of Git. |
+| `OIDC_CLIENT_ID` | The Keycloak client ID. Defaults to `datatools`. |
+| `OIDC_ADMIN_SUBJECT` | Leave empty for the initial deployment. Set it after the first sign-in using the steps below. |
+
+The Compose file passes these variables to the Datatools server. The UI selects
+OIDC when `/api/manager/public/appinfo` returns `"authMode": "oidc"`.
+
+#### Verify the first sign-in and grant administrator access
+
+1. Deploy the stack and open `/api/manager/public/appinfo` on the public
+   hostname. Confirm that it returns `"authMode": "oidc"` and that
+   `config.application.public_url` matches the public HTTPS origin. If the URL
+   is still the default, update `server.yml` in the existing configuration
+   volume using the instructions above.
+2. Sign in through the UI with the intended administrator's Keycloak account.
+   The dashboard shows **Standard user** until an administrator subject is
+   configured. In the same browser session, open `/api/auth/oidc/session` and
+   copy `user.subject`.
+3. Set `OIDC_ADMIN_SUBJECT` to that value in Portainer and update or redeploy
+   the existing stack so the server container receives the changed environment.
+   A restart of the existing container keeps its old environment. If you use
+   Compose from the shell, run `docker compose up -d datatools-server`.
+4. Refresh the dashboard. It should show **Application admin** and the **Admin**
+   button. The session endpoint should now return
+   `"applicationAdmin": true` under `permissions`.
 
 In OIDC mode, the browser uses the Datatools session cookie for API requests.
 The sign-out button ends that session. The identity provider can still have an
