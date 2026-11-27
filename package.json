@@ -110,6 +110,7 @@
     "redux-undo": "^1.0.0-beta9-9-7",
     "reselect": "^3.0.0",
     "shpjs": "^3.3.2",
+    "swr": "^2.5.1",
     "tinycolor2": "^1.4.2",
     "truncate": "^2.0.0",
     "turf-area": "^3.0.12",

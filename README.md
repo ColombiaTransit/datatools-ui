@@ -33,6 +33,18 @@ Deployment functionality will not work, and persistence may only work in certain
 
 This repository serves as the front end UI for the Data Manager application. It must be run in conjunction with [datatools-server](https://github.com/conveyal/datatools-server)
 
+### OpenID Connect sign-in
+
+Configure OIDC on [datatools-server](https://github.com/ColombiaTransit/datatools-server#oidc-login-preview)
+and serve the UI and `/api` on the same public origin. The UI reads the authentication
+mode from `/api/manager/public/appinfo`. Store the OIDC client secret in the server
+environment.
+
+In OIDC mode, the browser uses the Datatools session cookie for API requests.
+The sign-out button ends that session. The identity provider can still have an
+active single sign-on session. Manage accounts at the identity provider and
+assign project and feed access through the Datatools OIDC grants API.
+
 ## Documentation
 
 View the [latest release documentation](http://data-tools-docs.ibi-transit.com/en/latest/) at ReadTheDocs for more info on deployment and development as well as a user guide.
