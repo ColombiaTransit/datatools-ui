@@ -64,9 +64,8 @@ The separate Traefik file-provider configuration defines HTTPS routing.
 It sends `/api` and its subpaths to the server and other paths to the UI on the
 same hostname.
 
-1. Make sure Traefik has the Docker and file providers enabled. Set
-   `TRAEFIK_NETWORK` in your shell or `docker/.env` to the existing external
-   Docker network that Traefik uses. The example defaults to `traefik`.
+1. Make sure Traefik has the Docker and file providers enabled and is connected
+   to the existing external Docker network `treafik_default`.
 2. Copy your `datatools.yml` into the Traefik file provider's dynamic
    configuration directory. Replace `datatools.example.org` in both rules,
    adjust `websecure` if your HTTPS entry point has a different name, and
