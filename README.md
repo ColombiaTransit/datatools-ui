@@ -17,17 +17,23 @@ before starting the stack:
 
 ```bash
 cd docker
-cp ../configurations/default/env.yml.tmp ../configurations/default/env.yml
-docker compose pull datatools-server
-docker compose up -d --build
+docker compose pull
+docker compose up -d
 ```
 
 Open the HTTPS hostname configured in Traefik.
 
-Compose builds the UI locally and pulls `ghcr.io/colombiatransit/datatools-server:dev`
-for the API. Set `DATATOOLS_SERVER_IMAGE` in the shell or in `docker/.env` to
-select another tag or an image digest. Sign in with `docker login ghcr.io` before
-pulling if the package is private.
+Compose pulls the UI and API images from GHCR. Set `DATATOOLS_UI_IMAGE` or
+`DATATOOLS_SERVER_IMAGE` in the shell, in `docker/.env`, or in the Portainer
+stack environment to select another tag or image digest. If a package is
+private, authenticate to GHCR from Docker or add the registry credentials in
+Portainer.
+
+The **Build Datatools UI image** workflow publishes the default UI image from
+`dev`. To use custom UI build settings, build your own image with
+`docker/ui/Dockerfile`, publish it to your registry, then set `DATATOOLS_UI_IMAGE`
+to that image. The Dockerfile reads the UI settings from
+`configurations/default/env.yml` when present, or uses the bundled example.
 
 MongoDB and PostgreSQL are reachable by the Datatools server through a private
 Compose network. The server also uses the default network to serve the UI and

@@ -66,10 +66,7 @@ services:
       - database
       - traefik
   datatools-ui:
-    build:
-      context: ../
-      dockerfile: ./docker/ui/Dockerfile
-      args: *common-variables
+    image: "${DATATOOLS_UI_IMAGE:-ghcr.io/colombiatransit/datatools-ui:dev}"
     restart: always
     environment: *common-variables
     labels:
