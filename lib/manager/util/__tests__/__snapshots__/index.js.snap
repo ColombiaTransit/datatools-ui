@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`manager > util > index > feedSortOptions should sort alphabetically-asc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort alphabetically-asc 1`] = `
 Array [
   "another test feed with a version that ends later",
   "test feed with a version",
@@ -8,7 +8,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort alphabetically-desc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort alphabetically-desc 1`] = `
 Array [
   "test feed with no version",
   "test feed with a version",
@@ -16,7 +16,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort endDate-asc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort endDate-asc 1`] = `
 Array [
   "test feed with a version",
   "another test feed with a version that ends later",
@@ -24,7 +24,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort endDate-desc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort endDate-desc 1`] = `
 Array [
   "another test feed with a version that ends later",
   "test feed with a version",
@@ -32,7 +32,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort lastUpdated-asc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort lastUpdated-asc 1`] = `
 Array [
   "test feed with a version",
   "another test feed with a version that ends later",
@@ -40,7 +40,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort lastUpdated-desc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort lastUpdated-desc 1`] = `
 Array [
   "another test feed with a version that ends later",
   "test feed with a version",
@@ -48,7 +48,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort numErrors-asc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort numErrors-asc 1`] = `
 Array [
   "test feed with a version",
   "another test feed with a version that ends later",
@@ -56,7 +56,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort numErrors-desc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort numErrors-desc 1`] = `
 Array [
   "another test feed with a version that ends later",
   "test feed with a version",
@@ -64,7 +64,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort startDate-asc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort startDate-asc 1`] = `
 Array [
   "test feed with a version",
   "another test feed with a version that ends later",
@@ -72,7 +72,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > feedSortOptions should sort startDate-desc 1`] = `
+exports[`manager > util > index > > feedSortOptions > should sort startDate-desc 1`] = `
 Array [
   "another test feed with a version that ends later",
   "test feed with a version",
@@ -80,7 +80,7 @@ Array [
 ]
 `;
 
-exports[`manager > util > index > parseBounds > invalid > should fail to parse invalid lat/lon coordinates 1`] = `
+exports[`manager > util > index > > parseBounds > > invalid > > should fail to parse invalid lat/lon coordinates 1`] = `
 Object {
   "errors": Array [
     "West value is invalid. Expected a value between 180 and -180, but found -200",
@@ -92,7 +92,7 @@ Object {
 }
 `;
 
-exports[`manager > util > index > parseBounds > invalid > should fail to parse less than 3 values 1`] = `
+exports[`manager > util > index > > parseBounds > > invalid > > should fail to parse less than 3 values 1`] = `
 Object {
   "errors": Array [
     "Incorrect amount of values. Found 3, expected 4.",
@@ -101,7 +101,7 @@ Object {
 }
 `;
 
-exports[`manager > util > index > parseBounds > valid > should parse valid bounds 1`] = `
+exports[`manager > util > index > > parseBounds > > valid > > should parse valid bounds 1`] = `
 Object {
   "bounds": Object {
     "east": -122.696827,
