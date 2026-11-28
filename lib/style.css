@@ -796,8 +796,15 @@ textarea:focus {
 }
 
 .data-table-controls label {
+  align-items: center;
+  display: inline-flex;
   font-weight: normal;
+  gap: 6px;
   margin: 0;
+}
+
+.data-table-controls select.form-control {
+  width: auto;
 }
 
 .data-table-small {
