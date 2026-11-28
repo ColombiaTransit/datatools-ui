@@ -110,6 +110,62 @@ kbd {
   background-color: #cccccc;
 }
 
+/* Feed version cards while the application uses Bootstrap 3. */
+.feed-version-card,
+.feed-version-map-controls {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.feed-version-card {
+  margin-bottom: 20px;
+}
+
+.feed-version-card > .card-header,
+.feed-version-card > .card-footer {
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+}
+
+.feed-version-card > .card-header {
+  border-bottom: 1px solid #ddd;
+  border-radius: 3px 3px 0 0;
+  display: flow-root;
+}
+
+.feed-version-card > .card-header > .card-title {
+  font-size: 16px;
+  margin: 0;
+}
+
+.feed-version-card > .card-footer {
+  border-radius: 0 0 3px 3px;
+}
+
+.feed-version-card > .list-group-flush {
+  margin-bottom: 0;
+}
+
+.feed-version-card > .list-group-flush > .list-group-item {
+  border-radius: 0;
+  border-width: 1px 0;
+}
+
+.feed-version-card > .list-group-flush > .list-group-item:first-child {
+  border-top-width: 0;
+}
+
+.feed-version-card > .list-group-flush:first-child > .list-group-item:first-child {
+  border-radius: 3px 3px 0 0;
+}
+
+.feed-version-card > .list-group-flush:last-child > .list-group-item:last-child {
+  border-bottom-width: 0;
+  border-radius: 0 0 3px 3px;
+}
+
 .feed-version-column {
   background-color: #eeeeee;
 }
