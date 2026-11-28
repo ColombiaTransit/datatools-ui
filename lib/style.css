@@ -159,6 +159,7 @@ kbd {
   color: #a94442;
 }
 
+.datatools-card > .table,
 .datatools-card > .list-group-flush {
   margin-bottom: 0;
 }
