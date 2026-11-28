@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`manager > actions > projects > should load a project and associated data 1`] = `
+exports[`manager > actions > projects > > should load a project and associated data 1`] = `
 Object {
   "active": null,
   "all": Array [
@@ -94,7 +94,7 @@ Object {
 }
 `;
 
-exports[`manager > actions > projects > should set a new feed source sort order 1`] = `
+exports[`manager > actions > projects > > should set a new feed source sort order 1`] = `
 Object {
   "active": null,
   "all": Array [],

@@ -1,5 +1,8 @@
 // @flow
 
+// $FlowFixMe legacy Flow does not resolve Vitest's entry point.
+import {vi} from 'vitest'
+
 /**
  * Temporarily change the internal behavior of the Date.now method such that it
  * returns a time that is based off of the given value in milliseconds after
@@ -7,7 +10,7 @@
  * generate this number.
  */
 export function setTestTime (time: number) {
-  jest.spyOn(Date, 'now').mockImplementation(() => new Date(time).valueOf())
+  vi.spyOn(Date, 'now').mockImplementation(() => new Date(time).valueOf())
 }
 
 /**

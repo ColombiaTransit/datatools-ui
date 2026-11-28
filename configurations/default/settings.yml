@@ -1,4 +1,4 @@
-# Mastarm/deployment configuration properties. Note: application configuration
+# Legacy browser-test configuration properties. Note: application configuration
 # is now taken entirely from server application (there are still some
 # UI-specific env variables are in this repository's env.yml).
 

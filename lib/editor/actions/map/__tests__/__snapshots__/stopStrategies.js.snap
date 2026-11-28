@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`editor > actions > stopStrategies updateShapeDistTraveled should populate distance traveled in a loop pattern 1`] = `
+exports[`editor > actions > stopStrategies > updateShapeDistTraveled > should populate distance traveled in a loop pattern 1`] = `
 Array [
   Object {
     "defaultTravelTime": 0,

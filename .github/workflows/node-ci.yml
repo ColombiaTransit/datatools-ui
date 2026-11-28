@@ -53,6 +53,8 @@ jobs:
         run: yarn flow
       - name: Run tests
         run: yarn test-client
+      - name: Verify browser test discovery
+        run: yarn test-end-to-end --listTests
       - name: Build with minification
         run: yarn build
       - name: Build docs

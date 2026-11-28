@@ -3,6 +3,7 @@
 
 declare module 'qs' {
   declare module.exports: {
+    parse(string, ?{ignoreQueryPrefix?: boolean}): Object,
     stringify(Object): string
   }
 }

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`editor > util > map > recalculateShape > deleting > should delete a point in the middle of the control points 1`] = `
+exports[`editor > util > map > > recalculateShape > > deleting > > should delete a point in the middle of the control points 1`] = `
 Object {
   "coordinates": Array [
     Array [
@@ -128,7 +128,7 @@ Object {
 }
 `;
 
-exports[`editor > util > map > recalculateShape > deleting > should delete the first stop 1`] = `
+exports[`editor > util > map > > recalculateShape > > deleting > > should delete the first stop 1`] = `
 Object {
   "coordinates": Array [
     Array [
@@ -220,7 +220,7 @@ Object {
 }
 `;
 
-exports[`editor > util > map > recalculateShape > deleting > should delete the last stop 1`] = `
+exports[`editor > util > map > > recalculateShape > > deleting > > should delete the last stop 1`] = `
 Object {
   "coordinates": Array [
     Array [
@@ -309,7 +309,7 @@ Object {
 }
 `;
 
-exports[`editor > util > map > recalculateShape > deleting > should delete the last stop when there are control points after the last stop 1`] = `
+exports[`editor > util > map > > recalculateShape > > deleting > > should delete the last stop when there are control points after the last stop 1`] = `
 Object {
   "coordinates": Array [
     Array [
@@ -463,7 +463,7 @@ Object {
 }
 `;
 
-exports[`editor > util > map > recalculateShape > updating > should update a point in the middle of the control points 1`] = `
+exports[`editor > util > map > > recalculateShape > > updating > > should update a point in the middle of the control points 1`] = `
 Object {
   "coordinates": Array [
     Array [
@@ -646,7 +646,7 @@ Object {
 }
 `;
 
-exports[`editor > util > map > recalculateShape > updating > should update the first stop 1`] = `
+exports[`editor > util > map > > recalculateShape > > updating > > should update the first stop 1`] = `
 Object {
   "coordinates": Array [
     Array [
@@ -828,7 +828,7 @@ Object {
 }
 `;
 
-exports[`editor > util > map > recalculateShape > updating > should update the last stop 1`] = `
+exports[`editor > util > map > > recalculateShape > > updating > > should update the last stop 1`] = `
 Object {
   "coordinates": Array [
     Array [

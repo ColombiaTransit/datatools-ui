@@ -1,20 +1,9 @@
 // @flow
 
-import multi from '@conveyal/woonerf/store/multi'
-import promise from '@conveyal/woonerf/store/promise'
-import {middleware as fetchMiddleware} from '@conveyal/woonerf/fetch'
-import Enzyme, {mount} from 'enzyme'
-import EnzymeReactAdapter from '@wojtekmaj/enzyme-adapter-react-17'
-import {mountToJson} from 'enzyme-to-json'
 import clone from 'lodash/cloneDeep'
-import {get} from 'object-path'
-import React from 'react'
-import {Provider} from 'react-redux'
-import {routerReducer as routing} from 'react-router-redux'
 import {applyMiddleware, combineReducers, createStore} from 'redux'
-import configureStore from 'redux-mock-store'
-import thunkMiddleware from 'redux-thunk'
 
+import actionMiddleware from '../../../lib/common/store/actionMiddleware'
 import admin from '../../../lib/admin/reducers'
 import {defaultState as defaultAdminOrganizationsState} from '../../../lib/admin/reducers/organizations'
 import {defaultState as defaultAdminServersState} from '../../../lib/admin/reducers/servers'
@@ -36,9 +25,9 @@ import {defaultState as defaultGtfsShapesState} from '../../../lib/gtfs/reducers
 import {defaultState as defaultGtfsStopsState} from '../../../lib/gtfs/reducers/stops'
 import {defaultState as defaultGtfsTimetablesState} from '../../../lib/gtfs/reducers/timetables'
 import {defaultState as defaultGtfsValidationState} from '../../../lib/gtfs/reducers/validation'
-import * as gtfsPlusReducers from '../../../lib/gtfsplus/reducers'
+import gtfsPlusReducers from '../../../lib/gtfsplus/reducers'
 import {defaultState as defaultGtfsPlusState} from '../../../lib/gtfsplus/reducers/gtfsplus'
-import * as managerReducers from '../../../lib/manager/reducers'
+import managerReducers from '../../../lib/manager/reducers'
 import {defaultState as defaultManagerLanguagesState} from '../../../lib/manager/reducers/languages'
 import {defaultState as defaultManagerProjectsState} from '../../../lib/manager/reducers/projects'
 import {defaultState as defaultManagerStatusState} from '../../../lib/manager/reducers/status'
@@ -48,23 +37,12 @@ import type {AppState} from '../../../lib/types/reducers'
 
 import * as manager from './manager'
 
-Enzyme.configure({ adapter: new EnzymeReactAdapter() })
-
 const defaultManagerState = {
   languages: defaultManagerLanguagesState,
   projects: defaultManagerProjectsState,
   status: defaultManagerStatusState,
   ui: defaultManagerUiState,
   user: defaultManagerUserState
-}
-
-const defaultRouterLocation = {
-  action: '',
-  hash: '',
-  key: '',
-  pathname: '',
-  query: {},
-  search: ''
 }
 
 /**
@@ -106,11 +84,7 @@ export function getMockInitialState (): AppState {
       timetables: defaultGtfsTimetablesState,
       validation: defaultGtfsValidationState
     },
-    gtfsplus: defaultGtfsPlusState,
-    routing: {
-      location: defaultRouterLocation,
-      routeParams: {}
-    } // react-router state
+    gtfsplus: defaultGtfsPlusState
   })
 }
 
@@ -133,7 +107,6 @@ export function getMockStateWithProject (): AppState {
   const {mockProject} = manager
   state.projects.active = mockProject
   state.projects.all.push(mockProject)
-  state.routing.routeParams.projectId = mockProject.id
   return state
 }
 
@@ -149,7 +122,6 @@ export function getMockStateWithProjectWithFeedsAndDeployment (): AppState {
   state.projects.active = mockProjectWithDeployment
   state.projects.all.push(mockProjectWithDeployment)
   state.projects.filter.feedSourceTableComparisonColumn = 'DEPLOYED'
-  state.routing.routeParams.projectId = mockProjectWithDeployment.id
   return state
 }
 
@@ -164,13 +136,6 @@ export function getMockEditorState (): AppState {
   return editorState
 }
 
-const storeMiddleWare = [
-  fetchMiddleware,
-  multi,
-  promise,
-  thunkMiddleware
-]
-
 /**
  * Creates a new store with reducers that will update state.
  */
@@ -178,49 +143,15 @@ export function makeMockStore (initialState: AppState = getMockInitialState()) {
   const store = createStore(
     // $FlowFixMe not sure why this is giving a flow error
     combineReducers({
-      routing,
-      ...{
-        ...managerReducers,
-        admin,
-        alerts,
-        ...gtfsPlusReducers,
-        editor,
-        gtfs
-      }
+      ...managerReducers,
+      admin,
+      alerts,
+      ...gtfsPlusReducers,
+      editor,
+      gtfs
     }),
     initialState,
-    applyMiddleware(...storeMiddleWare)
+    applyMiddleware(...actionMiddleware)
   )
-  // Helper method to snapshot a part of the state. Don't snapshot the entire
-  // state, because the messages are huge!
-  store.expectStateToMatchSnapshot = (subStatePath: ?string) => {
-    if (!subStatePath) throw new Error('Snapshotting the entire state not allowed!')
-    expect(get(store.getState(), subStatePath)).toMatchSnapshot()
-  }
   return store
-}
-
-/**
- * Mount a react component within a mock redux store. This mock redux store
- * accepts actions, but doesn't send any of those results to the reducers.
- * This function is primarily used for taking snapshots of components and
- * containers in order to verify that they are rendering expected values.
- */
-export function mockWithProvider (
-  ConnectedComponent: any,
-  connectedComponentProps: any = {},
-  storeState: AppState = getMockInitialState()
-) {
-  const store = configureStore(storeMiddleWare)(storeState)
-  const wrapper = mount(
-    <Provider store={store}>
-      <ConnectedComponent {...connectedComponentProps} />
-    </Provider>
-  )
-
-  return {
-    snapshot: () => mountToJson(wrapper),
-    store,
-    wrapper
-  }
 }

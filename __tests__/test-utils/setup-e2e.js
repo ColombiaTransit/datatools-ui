@@ -309,7 +309,7 @@ async function startClientServer () {
 
           function writeOutputs (data, logType) {
             return fs.writeFile(
-              getTestFolderFilename(`mastarm-build-${logType}.log`),
+              getTestFolderFilename(`ui-build-${logType}.log`),
               data
             )
           }

@@ -110,6 +110,126 @@ kbd {
   background-color: #cccccc;
 }
 
+.datatools-dialog {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  margin: 30px auto;
+  max-height: calc(100% - 60px);
+  max-width: calc(100% - 20px);
+  overscroll-behavior: contain;
+  padding: 0;
+  width: 600px;
+}
+
+.datatools-dialog::backdrop {
+  background: rgba(0, 0, 0, .5);
+}
+
+body:has(.datatools-dialog[open]) {
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .datatools-dialog {
+    margin: 10px auto;
+    max-height: calc(100% - 20px);
+  }
+}
+
+/* Card styles while the application uses Bootstrap 3. */
+.datatools-card,
+.feed-version-map-controls {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}
+
+.datatools-card {
+  margin-bottom: 20px;
+}
+
+.datatools-card > .card-header,
+.datatools-card > .card-footer {
+  background-color: #f5f5f5;
+  padding: 10px 15px;
+}
+
+.datatools-card > .card-header {
+  border-bottom: 1px solid #ddd;
+  border-radius: 3px 3px 0 0;
+  display: flow-root;
+}
+
+.datatools-card > .card-header .card-title {
+  font-size: 16px;
+  margin: 0;
+}
+
+.datatools-card > .card-body,
+.datatools-card > .card-collapse > .card-body {
+  display: flow-root;
+  padding: 15px;
+}
+
+.datatools-card > .card-footer {
+  border-radius: 0 0 3px 3px;
+}
+
+.datatools-card-danger {
+  border-color: #ebccd1;
+}
+
+.datatools-card-danger > .card-header {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}
+
+.datatools-card-success {
+  border-color: #d6e9c6;
+}
+
+.datatools-card-success > .card-header {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+
+.datatools-disclosure-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.datatools-card > .table,
+.datatools-card > .list-group-flush {
+  margin-bottom: 0;
+}
+
+.datatools-card > .list-group-flush > .list-group-item {
+  border-radius: 0;
+  border-width: 1px 0;
+}
+
+.datatools-card > .list-group-flush > .list-group-item:first-child {
+  border-top-width: 0;
+}
+
+.datatools-card > .list-group-flush:first-child > .list-group-item:first-child {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.datatools-card > .list-group-flush:last-child > .list-group-item:last-child {
+  border-bottom-width: 0;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
 .feed-version-column {
   background-color: #eeeeee;
 }
@@ -279,11 +399,6 @@ td.feed-source-info {
   background: none;
   border-color: transparent;
   box-shadow: none;
-}
-
-/* Exception date range date picker */
-.exception-date-picker .input-group.date .input-group-addon {
-  padding: 6px 4px;
 }
 
 /* Exception ranges  */
@@ -649,12 +764,6 @@ textarea:focus {
   background: #555;
 }
 
-/* IMPORTANT (!) for date picker to show up aligned correctly with form input */
-.bootstrap-datetimepicker-widget.dropdown-menu.bottom {
-  top: 65px !important;
-  right: 23px !important;
-}
-
 /* UTILITY classes */
 
 .noselect {
@@ -793,10 +902,40 @@ textarea:focus {
   font-weight: bold;
 }
 
-/* React Bootstrap Table adjustments (no way to change toolbar class otherwise) */
+.data-table-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
 
-.react-bs-table-tool-bar {
-  margin: 0px;
+.data-table-controls input[type=search] {
+  margin-left: auto;
+  width: auto;
+}
+
+.data-table-controls label {
+  align-items: center;
+  display: inline-flex;
+  font-weight: normal;
+  gap: 6px;
+  margin: 0;
+}
+
+.data-table-controls select.form-control {
+  width: auto;
+}
+
+.data-table-small {
+  font-size: small;
+}
+
+.data-table-sort {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
 }
 
 /* Ensure react-select menu is on top of leaflet */
