@@ -1,7 +1,6 @@
 // @flow
 
 import clone from 'lodash/cloneDeep'
-import {routerReducer as routing} from 'react-router-redux'
 import {applyMiddleware, combineReducers, createStore} from 'redux'
 
 import actionMiddleware from '../../../lib/common/store/actionMiddleware'
@@ -46,15 +45,6 @@ const defaultManagerState = {
   user: defaultManagerUserState
 }
 
-const defaultRouterLocation = {
-  action: '',
-  hash: '',
-  key: '',
-  pathname: '',
-  query: {},
-  search: ''
-}
-
 /**
  * Returns a cloned version of the initial load state of the redux store.
  */
@@ -94,11 +84,7 @@ export function getMockInitialState (): AppState {
       timetables: defaultGtfsTimetablesState,
       validation: defaultGtfsValidationState
     },
-    gtfsplus: defaultGtfsPlusState,
-    routing: {
-      location: defaultRouterLocation,
-      routeParams: {}
-    } // react-router state
+    gtfsplus: defaultGtfsPlusState
   })
 }
 
@@ -121,7 +107,6 @@ export function getMockStateWithProject (): AppState {
   const {mockProject} = manager
   state.projects.active = mockProject
   state.projects.all.push(mockProject)
-  state.routing.routeParams.projectId = mockProject.id
   return state
 }
 
@@ -137,7 +122,6 @@ export function getMockStateWithProjectWithFeedsAndDeployment (): AppState {
   state.projects.active = mockProjectWithDeployment
   state.projects.all.push(mockProjectWithDeployment)
   state.projects.filter.feedSourceTableComparisonColumn = 'DEPLOYED'
-  state.routing.routeParams.projectId = mockProjectWithDeployment.id
   return state
 }
 
@@ -159,15 +143,12 @@ export function makeMockStore (initialState: AppState = getMockInitialState()) {
   const store = createStore(
     // $FlowFixMe not sure why this is giving a flow error
     combineReducers({
-      routing,
-      ...{
-        ...managerReducers,
-        admin,
-        alerts,
-        ...gtfsPlusReducers,
-        editor,
-        gtfs
-      }
+      ...managerReducers,
+      admin,
+      alerts,
+      ...gtfsPlusReducers,
+      editor,
+      gtfs
     }),
     initialState,
     applyMiddleware(...actionMiddleware)
