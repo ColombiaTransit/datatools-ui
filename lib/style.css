@@ -782,10 +782,33 @@ textarea:focus {
   font-weight: bold;
 }
 
-/* React Bootstrap Table adjustments (no way to change toolbar class otherwise) */
+.data-table-controls {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
 
-.react-bs-table-tool-bar {
-  margin: 0px;
+.data-table-controls input[type=search] {
+  margin-left: auto;
+  width: auto;
+}
+
+.data-table-controls label {
+  font-weight: normal;
+  margin: 0;
+}
+
+.data-table-small {
+  font-size: small;
+}
+
+.data-table-sort {
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
 }
 
 /* Ensure react-select menu is on top of leaflet */
