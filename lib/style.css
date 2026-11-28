@@ -281,11 +281,6 @@ td.feed-source-info {
   box-shadow: none;
 }
 
-/* Exception date range date picker */
-.exception-date-picker .input-group.date .input-group-addon {
-  padding: 6px 4px;
-}
-
 /* Exception ranges  */
 
 .exception-subtitle {
@@ -647,12 +642,6 @@ textarea:focus {
 /* Handle on hover */
 .GtfsEditor ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-/* IMPORTANT (!) for date picker to show up aligned correctly with form input */
-.bootstrap-datetimepicker-widget.dropdown-menu.bottom {
-  top: 65px !important;
-  right: 23px !important;
 }
 
 /* UTILITY classes */

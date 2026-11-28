@@ -642,6 +642,16 @@ async function clearAndType (selector: string, text: string) {
   await type(selector, text)
 }
 
+/** Set the locale-independent value of a native date control. */
+async function setDate (selector: string, value: string) {
+  await page.$eval(selector, (input, date) => {
+    const descriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')
+    if (!descriptor || !descriptor.set) throw new Error('Date input setter is unavailable')
+    descriptor.set.call(input, date)
+    input.dispatchEvent(new window.Event('input', {bubbles: true}))
+  }, value)
+}
+
 /**
  * Adds text to the end of input field.
  */
@@ -1430,13 +1440,13 @@ describe('end-to-end', () => {
           'eng',
           2
         )
-        await clearAndType(
+        await setDate(
           '[data-test-id="feedinfo-feed_start_date-input-container"] input',
-          '05/29/18'
+          '2018-05-29'
         )
-        await clearAndType(
+        await setDate(
           '[data-test-id="feedinfo-feed_end_date-input-container"] input',
-          '05/29/38'
+          '2038-05-29'
         )
         await pickColor(
           '[data-test-id="feedinfo-default_route_color-input-container"]',
@@ -1993,15 +2003,15 @@ describe('end-to-end', () => {
         )
 
         // start date
-        await clearAndType(
+        await setDate(
           '[data-test-id="calendar-start_date-input-container"] input',
-          '05/29/18'
+          '2018-05-29'
         )
 
         // end date
-        await clearAndType(
+        await setDate(
           '[data-test-id="calendar-end_date-input-container"] input',
-          '05/29/28'
+          '2028-05-29'
         )
 
         // save
@@ -2131,11 +2141,9 @@ describe('end-to-end', () => {
         await waitForSelector(
           '[data-test-id="exception-dates-container"] input'
         )
-        await wait(250, 'for date range picker to load')
-        await wait(1000, 'for date range animation to finish')
-        await clearAndType(
+        await setDate(
           '[data-test-id="exception-dates-container"] input',
-          '07/04/18'
+          '2018-07-04'
         )
 
         // save
@@ -2194,10 +2202,9 @@ describe('end-to-end', () => {
         )
 
         // set new date
-        await wait(1250, 'for date range picker to load')
-        await clearAndType(
+        await setDate(
           '[data-test-id="exception-dates-container"] input',
-          '07/05/18'
+          '2018-07-05'
         )
 
         // save
@@ -2251,25 +2258,21 @@ describe('end-to-end', () => {
         await waitForSelector(
           '[data-test-id="exception-dates-container"] input'
         )
-        await wait(1050, 'for date range picker to load')
-        await clearAndType(
+        await setDate(
           '[data-test-id="exception-dates-container"] input',
-          '08/04/18'
+          '2018-08-04'
         )
 
-        await wait(1050, 'for date range picker to load')
         await click('[data-test-id="exception-add-range"]')
 
-        // add end of range exception date (July 10, 2018)
-        await wait(1050, 'for date range picker to load')
+        // add end of range exception date (August 10, 2018)
         await waitForSelector(
           '[data-test-id="exception-date-range-0-2"] input'
         )
 
-        await wait(1050, 'for date range picker to load')
-        await clearAndType(
+        await setDate(
           '[data-test-id="exception-date-range-0-2"] input',
-          '08/10/18'
+          '2018-08-10'
         )
 
         // save
@@ -2285,7 +2288,12 @@ describe('end-to-end', () => {
         )
 
         // verify data was saved and retrieved from server
-        // TODO: verify the contents of the range?
+        await page.waitForFunction(() => {
+          const start = document.querySelector('[data-test-id="exception-date-range-0-1"] input')
+          const end = document.querySelector('[data-test-id="exception-date-range-0-2"] input')
+          return start instanceof HTMLInputElement && end instanceof HTMLInputElement &&
+            start.value === '2018-08-04' && end.value === '2018-08-10'
+        })
         await expectSelectorToContainHtml(
           '[data-test-id="exception-name-input-container"]',
           'test exception range'

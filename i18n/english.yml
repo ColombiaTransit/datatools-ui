@@ -308,6 +308,8 @@ components:
     dateRemoved: ⓘ Date has been removed. Date entered is already included in an existing range or single date!
     selectDate: Select date
   ExceptionDateRange:
+    startDate: Start date
+    endDate: End date
     deleteEndDate: Delete end date
     deleteRange: Delete range
   ExceptionValidationErrorsList: 
